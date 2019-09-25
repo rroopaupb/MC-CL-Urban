@@ -4,16 +4,52 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class UrbanRoutePlanner {
 	final static Double INF = Double.MAX_VALUE;
 	private LinkedList<Integer> finalpath = new LinkedList<>();
-	private Double[][][] urbanMap;
+	public Double[][][] urbanMap;
 	
-	int firstHouseNumber = 441;
-	int start = 441;
-	int target = 445;
+	//int firstHouseNumber = 441;
+	public int start = 441;
+	public int target = 445;
 	
+	public Double travelTime = 0.0; // in seconds
+	public boolean walkable = false;
+	public boolean taxiSupported = true;
+	public boolean pedestrianOnly = false;
+	public Double carDistance = 0.0;
+	
+	public UrbanRoutePlanner(Double[][][] map, int start, int target) {
+		super();
+		this.urbanMap = map;
+		this.start = start;
+		this.target = target;
+	}
+	
+	public UrbanRoutePlanner(int start, int target) {
+		super();
+		this.start = start;
+		this.target = target;
+	}
+
+	public UrbanRoutePlanner() {
+		
+	}
+	
+	public boolean isWalkable() {
+		return this.walkable;
+	}
+	
+	public boolean isTaxiSupported() {
+		return this.taxiSupported;
+	}
+	
+	public boolean isPedestrianOnly() {
+		return this.pedestrianOnly;
+	}
+
 	public Double[][] createGraph () throws FileNotFoundException, IOException {
 		
 		ExtractMap newmap = new ExtractMap();
@@ -36,7 +72,7 @@ public class UrbanRoutePlanner {
 		
 		int startIdx = startNode - 1;
         int endIdx = endNode - 1;
-        int length = this.urbanMap.length;	
+        int length = graph.length;	
         Node[] allNodes = new Node[length];
 		
         // startVisited record whether or not the node already visited by startNode and endNode
@@ -126,8 +162,36 @@ public class UrbanRoutePlanner {
         }
         this.finalpath.add(endIdx);
         System.out.println("Final Path : "+finalpath);
- 
+        
+        if (shortestLength < 100)
+        	walkable = true;
+        calculateTime();
         return shortestLength;
 		
 	}
+	
+	public void calculateTime() {
+		ListIterator list_Iter = finalpath.listIterator();
+		while(list_Iter.hasNext()){ 
+			int node1 = (int) list_Iter.next();
+			int node2 = (int) list_Iter.next();
+			Double distance = urbanMap[node1][node2][3];
+			Double speed;
+			if (isWalkable()) 
+				speed = 1.7;
+			else {
+				speed = urbanMap[node1][node2][1];
+				this.carDistance = this.carDistance + distance;
+			}	
+			Double time = distance/speed;
+			if (urbanMap[node1][node2][4] == 0)
+				this.taxiSupported = false;
+			this.travelTime = this.travelTime + time;
+			if (list_Iter.hasNext())
+				list_Iter.previous();
+			
+		}	
+		
+	}
+	
 }

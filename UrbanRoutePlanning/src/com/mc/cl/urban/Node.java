@@ -64,6 +64,7 @@ public class Node {
 		return shortestEndPath;
 	}
 
+
 	public void generatePopulation() {
 		Random rpeople = new Random();
 		int people = (int)(rpeople.nextGaussian()*10);
@@ -86,24 +87,6 @@ public class Node {
 		//System.out.println("Node : "+this.NodeId+" People : "+this.noOfPeople+" Cars : "+this.noOfCars);
 	}
 
-	/*public void printAdjacentNodes() {
-		System.out.println("Adjacent nodes : ");
-		for(Map.Entry<Node, Double> entry : this.adjacentNodes.entrySet()) {
-			Node key = entry.getKey();
-			Double value = entry.getValue();
-			key.printNode();
-			System.out.println("Distance : "+value);
-		}
-	}
-	
-	public void findAdjacentNodes(Double[][][] currentMap){
-		int index = this.NodeId;
-		for (int j=0;j<1700;j++) {
-			if (currentMap[index][j][0] == 1.0)	{
-				this.adjacentNodes.put(new Node(j),currentMap[index][j][3]);
-			}
-         }
-        		
-	}*/
+	//public boolean isCarSharingRequired
 }
 
