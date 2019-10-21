@@ -8,7 +8,7 @@ import java.util.ListIterator;
 
 public class UrbanRoutePlanner {
 	final static Double INF = Double.MAX_VALUE;
-	private LinkedList<Integer> finalpath = new LinkedList<>();
+	public LinkedList<Integer> finalpath = new LinkedList<>();
 	public Double[][][] urbanMap;
 	
 	//int firstHouseNumber = 441;
